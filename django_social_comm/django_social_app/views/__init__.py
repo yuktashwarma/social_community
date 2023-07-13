@@ -1,1 +1,1 @@
-from .userView import CreateUser
+from .userView import CreateUserAPIView

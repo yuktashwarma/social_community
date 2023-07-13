@@ -7,7 +7,8 @@ from django_social_comm.serializers import DataSerializer
 from ..models import User
 
 # Create your views here.
-class CreateUser(ListAPIView):
+class CreateUserAPIView(ListAPIView):
     """This endpoint list all of the available todos from the database"""
-    queryset = User.objects.all()
-    serializer_class = DataSerializer
+    def post(self, request):
+        queryset = User.objects.all()
+        serializer_class = DataSerializer
