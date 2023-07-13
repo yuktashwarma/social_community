@@ -1,14 +1,18 @@
 from django.shortcuts import render
 from rest_framework.generics import ListAPIView
-from rest_framework.generics import CreateAPIView
-from rest_framework.generics import DestroyAPIView
-from rest_framework.generics import UpdateAPIView
 from django_social_comm.serializers import DataSerializer
+from rest_framework.response import Response
 from ..models import User
-
 # Create your views here.
-class CreateUserAPIView(ListAPIView):
-    """This endpoint list all of the available todos from the database"""
-    def post(self, request):
-        queryset = User.objects.all()
-        serializer_class = DataSerializer
+class GetUserAPIView(ListAPIView):
+    """This endpoint list all the available todos from the database"""
+    queryset = User.objects.all()
+    def get(self, request, id=None):
+        
+        if request.GET.get("user_id"):
+            user_id=User.objects.filter(user_id=request.GET.get("user_id"))
+        else:
+            user_id=User.objects.all()
+        user_serialiser = DataSerializer(user_id, many=True)
+        return Response(user_serialiser.data)
+

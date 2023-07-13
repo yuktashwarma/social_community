@@ -3,5 +3,5 @@ from django_social_app.models import *
 
 class DataSerializer(serializers.ModelSerializer):
     class Meta:
-        model = User, LikeStat, CommentStat, Drama
+        model = User
         fields = "__all__"
