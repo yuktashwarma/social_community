@@ -20,5 +20,5 @@ from django.urls import include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/v1/social/',include("django_social_app.urls"))
+    path('api/v1/',include("django_social_app.urls"))
 ]
