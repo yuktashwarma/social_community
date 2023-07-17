@@ -9,7 +9,7 @@ from rest_framework import status
 
 class LikeAPIView(APIView):
     curr_state={"state": "none"}
-    def update(self, request):
+    def post(self, request):
         try:
             response=LikeStat.objects.get(user_id=request.data["user_id"], drama_id=request.data["drama_id"])
             if response is not None and response.drama_id is not None:
@@ -30,4 +30,14 @@ class LikeAPIView(APIView):
                 self.curr_state.update({"state":"added new like"})
                 return Response(self.curr_state,content_type="application/json",status=status.HTTP_201_CREATED)
             return Response(like_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+    def get(self, request):
+        count = {"count": 0}
+        if request.GET.get("drama_id"):
+            like_id=LikeStat.objects.filter(drama_id=request.GET.get("drama_id"))
+            count.update({"count": like_id.count})
+        else:
+            like_id=LikeStat.objects.filter(active=True).count()
+            count.update({"count": like_id})
+        return Response(count)
         
