@@ -9,8 +9,8 @@ class GetUserAPIView(APIView):
     """This endpoint list all the available todos from the database"""
     def get(self, request, id=None):
         
-        if request.GET.get("user_id", 2):
-            user_id=User.objects.filter(user_id=request.GET.get("user_id",2))
+        if request.GET.get("user_id"):
+            user_id=User.objects.filter(user_id=request.GET.get("user_id"))
         else:
             user_id=User.objects.all()
         user_serialiser = UserSerializer(user_id, many=True)

@@ -66,3 +66,4 @@ class CommentStat(models.Model):
     active = models.BooleanField(null=True)
     created_date = models.DateTimeField(null=True)
     last_updated_date = models.DateTimeField(null=True)
+

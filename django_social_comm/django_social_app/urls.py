@@ -10,7 +10,7 @@ urlpatterns = [
     path("user/create/", user_view.CreateUserAPIView.as_view(),name="create_user"),
     path("drama/view/", drama_view.GetDramaAPIView.as_view(),name="get_drama"),
     path("drama/create/", drama_view.CreateDramaAPIView.as_view(),name="create_drama"),
-    path("drama/like/", like_view.CreateDramaAPIView.as_view(),name="create_drama"),
+    path("drama/like/", like_view.AddLikeAPIView.as_view(),name="create_drama"),
     #path("user/update/<int:pk>/",User.UpdateTodoAPIView.as_view(),name="update_user"),
     #path("user/deactivate/<int:pk>/",User.DeleteTodoAPIView.as_view(),name="deactivate_user")
 ]
