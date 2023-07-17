@@ -1,3 +1,4 @@
+import datetime
 from django.shortcuts import render
 from rest_framework.views import APIView
 from django_social_comm.Serializers.LikeSerializer import LikeSerializer
@@ -7,27 +8,26 @@ from ..models import LikeStat
 from rest_framework import status
 
 class LikeAPIView(APIView):
-    def get(self, request, id=None):
-        if request.GET.get("drama_id"):
-            like_id=LikeStat.objects.filter(drama_id=request.GET.get("drama_id"))
-        else:
-            like_id=LikeStat.objects.filter(active=True).count()
-        return Response(like_id)
-    
-
-class AddLikeAPIView(APIView):
     curr_state={"state": "none"}
-    def post(self, request):
-        response=LikeStat.objects.get(user_id=request.data["user_id"])
-        if response is not None:
-            if response.active is True:
-                response.active=False
-                self.curr_state.update({"state":"False"})
-                validate = serialize('json', self.curr_state)
-            else:
-                response.active=True
+    def update(self, request):
         try:
-            response.save()
-            return Response(validate,content_type="application/json",status=status.HTTP_201_CREATED)
+            response=LikeStat.objects.get(user_id=request.data["user_id"], drama_id=request.data["drama_id"])
+            if response is not None and response.drama_id is not None:
+                if response.active is True:
+                    response.active=False
+                    response.last_updated_date=datetime.datetime.now()
+                    self.curr_state.update({"state":"False"})
+                else:
+                    response.active=True
+                    response.last_updated_date=datetime.datetime.now()
+                    self.curr_state.update({"state":"True"})
+                response.save()
+                return Response(self.curr_state,content_type="application/json",status=status.HTTP_202_ACCEPTED)
         except:
-            return Response(validate.errors, status=status.HTTP_400_BAD_REQUEST)
+            like_serializer=LikeSerializer(data=request.data)
+            if like_serializer.is_valid():
+                like_serializer.save()
+                self.curr_state.update({"state":"added new like"})
+                return Response(self.curr_state,content_type="application/json",status=status.HTTP_201_CREATED)
+            return Response(like_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        

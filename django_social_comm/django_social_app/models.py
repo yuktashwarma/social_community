@@ -1,3 +1,4 @@
+import datetime
 from django.db import models
 
 '''
@@ -42,13 +43,12 @@ Likes
 
 class LikeStat(models.Model):
     like_id = models.AutoField(primary_key=True)
-    user_id = models.ForeignKey(
-        "User", on_delete=models.CASCADE)
+    user_id = models.OneToOneField(User, blank=False, on_delete=models.CASCADE)
     drama_id = models.ForeignKey(
         "Drama", on_delete=models.CASCADE)
-    active = models.BooleanField(null=True)
-    created_date = models.DateTimeField(null=True)
-    last_updated_date = models.DateTimeField(null=True)
+    active = models.BooleanField(null=True, default=True)
+    created_date = models.DateTimeField(null=True, default=datetime.datetime.now())
+    last_updated_date = models.DateTimeField(null=True, default=datetime.datetime.now())
 
 
 '''
